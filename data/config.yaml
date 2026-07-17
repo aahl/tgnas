@@ -15,6 +15,13 @@ server:
   # trusted_proxy_hosts:
   #   - "s3.example.com"
 
+  # S3 CORS origins for browser clients. Supports exact values, * globs, and /regex/.
+  # CORS is disabled when this list and the effective bucket list are empty.
+  # allowed_origins:
+  #   - "https://frontend.example.com"
+  #   - "https://*.example.com"
+  #   - '/^https://[a-z]+\.internal\.example$/'
+
 auth:
   # region: "us-east-1"
   credentials:
@@ -59,5 +66,10 @@ buckets:
   tgnas:
     chat_id: "${TGNAS_TELEGRAM_CHAT_ID}"
     # public_read: false
+    # A non-empty bucket list replaces server.allowed_origins. Empty falls back to global.
+    # allowed_origins:
+    #   - "https://files.example.com"
   # private:
   #   chat_id: "-1001234567890"
+  #   allowed_origins:
+  #     - "https://private.example.com"
