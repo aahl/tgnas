@@ -562,7 +562,7 @@ func TestOpenMetadataFromConfigDoesNotCreateMissingDatabase(t *testing.T) {
 func TestRunLSReadsMetadataWhenServiceConfigIsIncomplete(t *testing.T) {
 	sqlitePath := filepath.Join(t.TempDir(), "metadata.sqlite")
 	configPath := filepath.Join(t.TempDir(), "config.yaml")
-	if err := os.WriteFile(configPath, []byte("metadata:\n  sqlite_path: \""+sqlitePath+"\"\n"), 0o600); err != nil {
+	if err := os.WriteFile(configPath, []byte("metadata:\n  sqlite_path: '"+sqlitePath+"'\n"), 0o600); err != nil {
 		t.Fatalf("WriteFile returned error: %v", err)
 	}
 	meta, err := metadata.OpenSQLite(sqlitePath)
@@ -585,7 +585,7 @@ func TestRunLSReadsMetadataWhenServiceConfigIsIncomplete(t *testing.T) {
 func TestRunLSRejectsUnknownLocalMetadataConfigField(t *testing.T) {
 	sqlitePath := filepath.Join(t.TempDir(), "metadata.sqlite")
 	configPath := filepath.Join(t.TempDir(), "config.yaml")
-	configData := "metadata:\n  sqlite_pth: \"" + sqlitePath + "\"\n"
+	configData := "metadata:\n  sqlite_pth: '" + sqlitePath + "'\n"
 	if err := os.WriteFile(configPath, []byte(configData), 0o600); err != nil {
 		t.Fatalf("WriteFile returned error: %v", err)
 	}
@@ -872,7 +872,7 @@ telegram:
   bot_token: "${TGNAS_GLOBAL_TOKEN}"
   api_base_url: "https://api.telegram.org"
 metadata:
-  sqlite_path: "`+metadataPath+`"
+  sqlite_path: '`+metadataPath+`'
 buckets:
   photos:
     chat_id: "-100123"
@@ -968,7 +968,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + sqlitePath + `"
+  sqlite_path: '` + sqlitePath + `'
 buckets:
   photos:
     chat_id: "-100"
@@ -1018,7 +1018,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + dbPath + `"
+  sqlite_path: '` + dbPath + `'
 buckets:
   new:
     chat_id: "-100555"
@@ -1078,7 +1078,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + dbPath + `"
+  sqlite_path: '` + dbPath + `'
 buckets:
   new:
     chat_id: "-100666"
@@ -1142,7 +1142,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + dbPath + `"
+  sqlite_path: '` + dbPath + `'
 buckets:
   old:
     chat_id: "-100777"
@@ -1188,7 +1188,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + dbPath + `"
+  sqlite_path: '` + dbPath + `'
 buckets:
   new:
     chat_id: "-100999"
@@ -1234,7 +1234,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + dbPath + `"
+  sqlite_path: '` + dbPath + `'
 buckets:
   new:
     chat_id: "-100111"
@@ -1279,7 +1279,7 @@ auth:
 telegram:
   bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
 metadata:
-  sqlite_path: "` + dbPath + `"
+  sqlite_path: '` + dbPath + `'
 buckets:
   old:
     chat_id: "-100333"
@@ -1847,11 +1847,11 @@ auth:
 telegram:
   bot_token: 123456:valid-token
 metadata:
-  sqlite_path: %s
+  sqlite_path: '%s'
 buckets:
   photos:
     chat_id: "-100"
-%s`, tc.globalCORS, strconv.Quote(sqlitePath), tc.bucketCORS)
+%s`, tc.globalCORS, sqlitePath, tc.bucketCORS)
 			if err := os.WriteFile(configPath, []byte(contents), 0o600); err != nil {
 				t.Fatal(err)
 			}
@@ -1903,7 +1903,7 @@ func TestCombinedHandlerDoesNotApplyS3CORSToWebDAV(t *testing.T) {
 		"telegram:",
 		"  bot_token: 123456:valid-token",
 		"metadata:",
-		"  sqlite_path: " + strconv.Quote(sqlitePath),
+		"  sqlite_path: '" + sqlitePath + "'",
 		"buckets:",
 		"  photos:",
 		"    chat_id: \"-100\"",
