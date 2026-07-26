@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/url"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -50,11 +51,11 @@ func openSQLite(dataSourceName string) (*SQLiteStore, error) {
 }
 
 func sqliteReadOnlyDSN(path string) string {
-	// On Windows, filepath.Abs returns backslashes which break file:// URLs.
-	// Convert to forward slashes and prepend / so url.URL produces file:///path
-	// (three slashes) which modernc/sqlite expects on Windows.
-	cleanPath := "/" + strings.ReplaceAll(path, "\\", "/")
-	u := url.URL{Scheme: "file", Path: cleanPath}
+	if runtime.GOOS == "windows" {
+		path = "/" + filepath.ToSlash(path)
+	}
+
+	u := url.URL{Scheme: "file", Path: path}
 	query := u.Query()
 	query.Set("mode", "ro")
 	u.RawQuery = query.Encode()
