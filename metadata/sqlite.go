@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/url"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -50,6 +51,10 @@ func openSQLite(dataSourceName string) (*SQLiteStore, error) {
 }
 
 func sqliteReadOnlyDSN(path string) string {
+	if runtime.GOOS == "windows" {
+		path = "/" + filepath.ToSlash(path)
+	}
+
 	u := url.URL{Scheme: "file", Path: path}
 	query := u.Query()
 	query.Set("mode", "ro")
