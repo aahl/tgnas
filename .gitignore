@@ -4,6 +4,7 @@
 /tgnas
 *.sqlite*
 
+.mindfs
 .worktrees
 .claude/worktrees
 .claude/settings.local.json

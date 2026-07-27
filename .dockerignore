@@ -1,6 +1,7 @@
 .git
 .claude
 .agents
+.mindfs
 vendor
 *.sqlite
 *.db

@@ -29,7 +29,10 @@ auth:
       secret_key_env: "TGNAS_SECRET_KEY"
 
 telegram:
-  bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
+  # Direct token value or full ${ENV} reference. Takes precedence over bot_token_env.
+  bot_token: "${TGNAS_TELEGRAM_BOT_TOKEN}"
+  # Deprecated: prefer telegram.bot_token
+  # bot_token_env: "TGNAS_TELEGRAM_BOT_TOKEN"
   # api_base_url: "https://api.telegram.org"
   # caption_template: "{bucket}/{key}"
   # timeout: "30s"
@@ -65,11 +68,16 @@ webdav:
 buckets:
   tgnas:
     chat_id: "${TGNAS_TELEGRAM_CHAT_ID}"
+    # Optional per-bucket override. Direct value or full ${ENV} reference.
+    # Takes precedence over telegram.bot_token and telegram.bot_token_env.
+    # bot_token: "${TGNAS_TELEGRAM_BOT_TOKEN_PHOTOS}"
     # public_read: false
     # A non-empty bucket list replaces server.allowed_origins. Empty falls back to global.
     # allowed_origins:
     #   - "https://files.example.com"
   # private:
   #   chat_id: "-1001234567890"
+  #   # This bucket uses its own bot instead of the global telegram.bot_token.
+  #   bot_token: "${TGNAS_TELEGRAM_BOT_TOKEN_PRIVATE}"
   #   allowed_origins:
   #     - "https://private.example.com"

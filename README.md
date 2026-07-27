@@ -31,7 +31,7 @@ Common environment variables:
 
 - `TGNAS_LISTEN` overrides `server.listen` when `server.listen_env` is configured. Default is `:9000`.
 - `TGNAS_SECRET_KEY` is the example S3/WebDAV credential secret.
-- `TGNAS_TELEGRAM_BOT_TOKEN` provides the Telegram bot token in the default Docker-oriented config.
+- `TGNAS_TELEGRAM_BOT_TOKEN` provides the Telegram bot token.
 - `TGNAS_TELEGRAM_CHAT_ID` is the default bucket chat ID reference.
 - `TGNAS_SQLITE_PATH` can override the metadata SQLite path.
 
@@ -41,6 +41,7 @@ Bucket-level public read can be enabled for anonymous S3 object downloads:
 buckets:
   public-files:
     chat_id: "${TGNAS_TELEGRAM_CHAT_ID}"
+    bot_token: "${TGNAS_XXXX_BOT_TOKEN}" # (Optional)
     public_read: true
 ```
 
