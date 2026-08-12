@@ -560,7 +560,15 @@ func uploadedFileFromResult(fileType string, result uploadResult) (UploadedFile,
 	case TypeAnimation:
 		return mediaToUploadedFile("animation", result.Animation)
 	case TypeDocument:
-		return mediaToUploadedFile("document", result.Document)
+		// Telegram 对 .webp 文件会返回 sticker 消息而不是 document（webp 是 Telegram 贴纸格式）。
+		// 回退解析 sticker，使 sendDocument 上传的 webp 也能正常使用。
+		if result.Document.FileID != "" {
+			return mediaToUploadedFile("document", result.Document)
+		}
+		if result.Sticker.FileID != "" {
+			return mediaToUploadedFile("sticker", result.Sticker)
+		}
+		return UploadedFile{}, errors.New("telegram upload response missing document or sticker")
 	default:
 		return UploadedFile{}, fmt.Errorf("unsupported telegram upload type %q", fileType)
 	}
@@ -587,6 +595,7 @@ type uploadEnvelope struct {
 type uploadResult struct {
 	MessageID int64          `json:"message_id"`
 	Document  telegramFile   `json:"document"`
+	Sticker   telegramFile   `json:"sticker"`
 	Video     telegramFile   `json:"video"`
 	Audio     telegramFile   `json:"audio"`
 	Animation telegramFile   `json:"animation"`
