@@ -560,8 +560,9 @@ func uploadedFileFromResult(fileType string, result uploadResult) (UploadedFile,
 	case TypeAnimation:
 		return mediaToUploadedFile("animation", result.Animation)
 	case TypeDocument:
-		// Telegram 对 .webp 文件会返回 sticker 消息而不是 document（webp 是 Telegram 贴纸格式）。
-		// 回退解析 sticker，使 sendDocument 上传的 webp 也能正常使用。
+		// Telegram returns a sticker message instead of a document for .webp
+		// files (webp is Telegram's sticker format). Fall back to parsing the
+		// sticker so .webp files uploaded via sendDocument still work.
 		if result.Document.FileID != "" {
 			return mediaToUploadedFile("document", result.Document)
 		}

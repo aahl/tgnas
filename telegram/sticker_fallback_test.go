@@ -3,8 +3,9 @@ package telegram
 import "testing"
 
 func TestUploadedFileFromResultFallsBackToStickerForWebP(t *testing.T) {
-	// Telegram 对 sendDocument 上传的 .webp 文件返回 sticker 消息而不是 document。
-	// TypeDocument 分支必须回退解析 sticker，否则 webp 上传会失败。
+	// Telegram returns a sticker message instead of a document for .webp files
+	// uploaded via sendDocument. The TypeDocument branch must fall back to
+	// parsing the sticker, otherwise .webp uploads fail.
 	file, err := uploadedFileFromResult(TypeDocument, uploadResult{
 		Document: telegramFile{},
 		Sticker: telegramFile{
@@ -26,7 +27,7 @@ func TestUploadedFileFromResultFallsBackToStickerForWebP(t *testing.T) {
 }
 
 func TestUploadedFileFromResultDocumentStillWorks(t *testing.T) {
-	// 普通 document 响应不受影响。
+	// Regular document responses are unaffected.
 	file, err := uploadedFileFromResult(TypeDocument, uploadResult{
 		Document: telegramFile{
 			FileID:       "doc-file-id-456",
@@ -44,7 +45,7 @@ func TestUploadedFileFromResultDocumentStillWorks(t *testing.T) {
 }
 
 func TestUploadedFileFromResultMissingBothReturnsError(t *testing.T) {
-	// document 和 sticker 都缺失时报错。
+	// An error is returned when both document and sticker are missing.
 	_, err := uploadedFileFromResult(TypeDocument, uploadResult{})
 	if err == nil {
 		t.Fatal("expected error when both document and sticker are missing")
